@@ -94,8 +94,11 @@ def reroll(dice):
     """Return dice that return even outcomes and re-roll odd outcomes of DICE."""
     def rerolled():
         # BEGIN PROBLEM 3
-        "*** REPLACE THIS LINE ***"
-        return dice()  # Replace this statement
+        score = roll_dice(1, dice)
+        if score % 2 == 0:
+            return score
+        else:
+            return roll_dice(1, dice)
         # END PROBLEM 3
     return rerolled
 
