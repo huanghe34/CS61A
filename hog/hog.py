@@ -374,6 +374,21 @@ def swap_strategy(score, opponent_score, margin=8, num_rolls=4):
     # END PROBLEM 10
 check_strategy(swap_strategy)
 
+def hogwild_strategy(score, opponent_score, margin=8, num_rolls=4):
+    """This strategy rolls 0 dice when it triggers a beneficial swap. It also
+    rolls 0 dice if it gives at least MARGIN points. Otherwise, it rolls
+    NUM_ROLLS.
+    """
+    # BEGIN PROBLEM 10
+    if bacon_strategy(score, opponent_score, margin, num_rolls) == 0:
+        return 0
+    free_bacon_score = take_turn(0, opponent_score, dice=six_sided)
+    score = score + free_bacon_score
+    if score * 2 == opponent_score:
+        return 0
+    return num_rolls  # Replace this statement
+    # END PROBLEM 10
+check_strategy(swap_strategy)
 
 def final_strategy(score, opponent_score):
     """Write a brief description of your final strategy.
