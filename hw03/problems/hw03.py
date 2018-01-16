@@ -92,7 +92,11 @@ def filtered_accumulate(combiner, base, pred, n, term):
     True
     """
     def combine_if(x, y):
-        "*** YOUR CODE HERE ***"
+        if pred(y):
+            return combiner(x, y)
+        else:
+            return x
+
     return accumulate(combine_if, base, n, term)
 
 def odd(x):
@@ -116,9 +120,15 @@ def repeated(f, n):
     >>> repeated(square, 0)(5)
     5
     """
-    "*** YOUR CODE HERE ***"
+#    if n == 0:
+#        return lambda x: x
+#    if n == 1:
+#        return f
+#    else:
+#        return lambda x: f(repeated(f, n-1)(x))
+    return lambda x: accumulate(compose1, lambda y: x, n, lambda t: f)(x)
 
-def compose1(f, g):
+def compose1(g, f):
     """Return a function h, such that h(x) = f(g(x))."""
     def h(x):
         return f(g(x))
