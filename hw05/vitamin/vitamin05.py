@@ -83,13 +83,14 @@ def replace_leaf(t, old, new):
     >>> laerad == yggdrasil # Make sure original tree is unmodified
     True
     """
-    t = copy_tree(t)
     if old == new:
         return t
-    if is_leaf(t):
-        root(t) = new
+    if is_leaf(t) and root(t) == old:
+        return tree(new)
+    elif is_leaf(t) and root(t) != old:
+        return t
     else:
-        return replace_leaf(branches(t), old, new)
+        return tree(root(t), [replace_leaf(b, old, new) for b in branches(t)])
 
 def swap(a, b):
     """Swap the contents of lists a and b.
@@ -102,4 +103,8 @@ def swap(a, b):
     >>> b
     [1, 'two', 3]
     """
-    "*** YOUR CODE HERE ***"
+    c = list(a)
+    a.clear()
+    a.extend(b)
+    b.clear()
+    b.extend(c)
