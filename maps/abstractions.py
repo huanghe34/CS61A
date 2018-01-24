@@ -64,13 +64,14 @@ def make_restaurant(name, location, categories, price, reviews):
     # You may change this starter implementation however you wish, including
     # adding more items to the dictionary below.
     # BEGIN Question 1
-    "*** REPLACE THIS LINE ***"
+    review_scores = [review_rating(i) for i in reviews]
     # END Question 1
     return {
         'name': name,
         'location': location,
         'categories': categories,
         'price': price,
+        'reviews': review_scores
     }
 
 def restaurant_name(restaurant):
@@ -94,7 +95,7 @@ def restaurant_ratings(restaurant):
     """Return a list of ratings, which are numbers from 1 to 5, of the
     restaurant based on the reviews of the restaurant."""
     # BEGIN Question 1
-    "*** REPLACE THIS LINE ***"
+    return restaurant['reviews']
     # END Question 1
 
 
@@ -103,11 +104,11 @@ def restaurant_ratings(restaurant):
 def restaurant_num_ratings(restaurant):
     """Return the number of ratings for the restaurant."""
     # BEGIN Question 2
-    "*** REPLACE THIS LINE ***"
+    return len(restaurant_ratings(restaurant))
     # END Question 2
 
 def restaurant_mean_rating(restaurant):
     """Return the average rating for the restaurant."""
     # BEGIN Question 2
-    "*** REPLACE THIS LINE ***"
+    return sum(restaurant_ratings(restaurant)) / restaurant_num_ratings(restaurant)
     # END Question 2

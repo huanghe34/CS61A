@@ -1,0 +1,8 @@
+'delete-correct', (3072, 70)
+'reduce-correct', (1024, 70)
+'build_successors_table-correct', (3584, 70)
+'map-correct', (0, 70)
+'make_pytunes-correct', (1536, 70)
+'filter-correct', (512, 70)
+'add_song-correct', (2560, 70)
+'num_songs-correct', (2048, 70)
