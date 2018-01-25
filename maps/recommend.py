@@ -19,7 +19,8 @@ def find_closest(location, centroids):
     [2.0, 3.0]
     """
     # BEGIN Question 3
-    "*** REPLACE THIS LINE ***"
+    disc = (lambda x: lambda y: distance(x, y))(location)
+    return min(centroids, key = disc)
     # END Question 3
 
 
@@ -48,14 +49,19 @@ def group_by_centroid(restaurants, centroids):
     restaurants closest to the same centroid.
     """
     # BEGIN Question 4
-    "*** REPLACE THIS LINE ***"
+    pairs = []
+    for restaurant in restaurants:
+        pairs += [[find_closest(restaurant_location(restaurant), centroids)] + [restaurant]]
+    return group_by_first(pairs)
     # END Question 4
 
 
 def find_centroid(cluster):
     """Return the centroid of the locations of the restaurants in cluster."""
     # BEGIN Question 5
-    "*** REPLACE THIS LINE ***"
+    locations = [restaurant_location(restaurant) for restaurant in cluster]
+    lat_and_long = zip(*locations)
+    return [mean(s) for s in lat_and_long]
     # END Question 5
 
 
@@ -69,7 +75,8 @@ def k_means(restaurants, k, max_updates=100):
     while old_centroids != centroids and n < max_updates:
         old_centroids = centroids
         # BEGIN Question 6
-        "*** REPLACE THIS LINE ***"
+        clusters = group_by_centroid(restaurants, old_centroids)
+        centroids = [find_centroid(c) for c in clusters]
         # END Question 6
         n += 1
     return centroids
@@ -97,10 +104,14 @@ def find_predictor(user, restaurants, feature_fn):
     ys = [reviews_by_user[restaurant_name(r)] for r in restaurants]
 
     # BEGIN Question 7
-    "*** REPLACE THIS LINE ***"
-    b, a, r_squared = 0, 0, 0  # REPLACE THIS LINE WITH YOUR SOLUTION
+    S_xx = sum([(x - mean(xs))**2 for x in xs])
+    S_yy = sum([(y - mean(ys))**2 for y in ys])
+    xys = zip(xs, ys)
+    S_xy = sum([(x[0] - mean(xs)) * (x[1] - mean(ys)) for x in xys])
+    b = S_xy / S_xx
+    a = mean(ys) - b * mean(xs)
+    r_squared = S_xy**2 / (S_xx * S_yy) # REPLACE THIS LINE WITH YOUR SOLUTION
     # END Question 7
-
     def predictor(restaurant):
         return b * feature_fn(restaurant) + a
 
