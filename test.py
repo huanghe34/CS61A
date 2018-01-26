@@ -69,3 +69,13 @@ def hailstone_tree(n, h):
             return tree(n, [hailstone_tree(2 * n, h -1), hailstone_tree((n - 1) // 3, h - 1)])
         else:
             return tree(n, [hailstone_tree(2 * n, h -1)])
+
+def find_path(tree, x):
+    if root(tree) == x:
+        return [root(tree)]
+    else:
+        a = [[root(tree)] + find_path(b, x) for b in branches(tree)]
+        if [i for i in a if x in i]:
+            return [i for i in a if x in i][0]
+        else:
+            return []
