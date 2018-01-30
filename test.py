@@ -79,3 +79,16 @@ def find_path(tree, x):
             return [i for i in a if x in i][0]
         else:
             return []
+def add_this_many(x, el, lst):
+    count = sum([1 for i in lst if i == x])
+    for i in range(count):
+         lst.append(el)
+lst = [1, 2, 4, 2, 1]
+
+def memory(n):
+    def execute(f):
+        nonlocal n
+        n = f(n)
+        print(n)
+        return execute
+    return execute

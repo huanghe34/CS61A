@@ -47,15 +47,17 @@ def end(s):
 def weight(size):
     """Construct a weight of some size."""
     assert size > 0
-    "*** YOUR CODE HERE ***"
+    return tree(size)
 
 def size(w):
     """Select the size of a weight."""
-    "*** YOUR CODE HERE ***"
+    return root(w)
 
 def is_weight(w):
     """Whether w is a weight, not a mobile."""
-    "*** YOUR CODE HERE ***"
+    if root(w):
+        return True
+    return False
 
 def examples():
     t = mobile(side(1, weight(2)),
@@ -99,7 +101,15 @@ def balanced(m):
     >>> balanced(mobile(side(1, w), side(1, v)))
     False
     """
-    "*** YOUR CODE HERE ***"
+    if is_weight(m):
+        return True
+    left, right = sides(m)
+    if length(left) * total_weight(end(left)) == length(right) * total_weight(end(right)):
+        if is_weight(end(left)) and is_weight(end(right)):
+            return True
+        return balanced(end(left)) and balanced(end(right))
+    else:
+        return False
 
 def with_totals(m):
     """Return a mobile with total weights stored as the root of each mobile.
@@ -116,7 +126,10 @@ def with_totals(m):
     >>> [root(end(s)) for s in sides(v)]         # v should not change
     [None, None]
     """
-    "*** YOUR CODE HERE ***"
+    if all([is_weight(end(side)) for side in sides(m)]):
+        return tree(total_weight(m), sides(m))
+    else:
+        return tree(total_weight(m), [[side[0], with_totals(end(side))] for side in sides(m)])
 
 ############
 # Mutation #
@@ -145,7 +158,23 @@ def make_withdraw(balance, password):
     >>> w(10, 'l33t')
     "Your account is locked. Attempts: ['hwat', 'a', 'n00b']"
     """
-    "*** YOUR CODE HERE ***"
+    wrong_password = []
+    wrong_count = 0
+    def withdraw(amount, input_password):
+        nonlocal balance, password, wrong_password, wrong_count
+        if wrong_count == 3:
+            return "Your account is locked. Attempts: {}".format(wrong_password)
+        if input_password == password:
+            if amount > balance:
+                return 'Insufficient funds'
+            balance -= amount
+            return balance
+        else:
+            wrong_password += [input_password]
+            wrong_count += 1
+            return 'Incorrect password'
+    return withdraw
+
 
 def make_joint(withdraw, old_password, new_password):
     """Return a password-protected withdraw function that has joint access to
@@ -185,4 +214,13 @@ def make_joint(withdraw, old_password, new_password):
     >>> make_joint(w, 'hax0r', 'hello')
     "Your account is locked. Attempts: ['my', 'secret', 'password']"
     """
-    "*** YOUR CODE HERE ***"
+    msg = withdraw(0, old_password)
+    if type(msg) == str:
+        return msg
+    else: #old_password is correct
+        def new_withdraw(amount, password):
+            if password != old_password and password != new_password:
+                return withdraw(amount, password)
+            else:
+                return withdraw(amount, old_password)
+        return new_withdraw

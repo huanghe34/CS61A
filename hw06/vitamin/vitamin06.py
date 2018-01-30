@@ -18,7 +18,15 @@ def make_counter():
     >>> c('b') + c2('b')
     5
     """
-    "*** YOUR CODE HERE ***"
+    dict = {}
+    def counter(name):
+        nonlocal dict
+        if name not in dict:
+            dict[name] = 1
+        else:
+            dict[name] += 1
+        return dict[name]
+    return counter
 
 def make_fib():
     """Returns a function that returns the next Fibonacci number
@@ -39,7 +47,19 @@ def make_fib():
     >>> fib() + sum([fib2() for _ in range(5)])
     12
     """
-    "*** YOUR CODE HERE ***"
+    n = 0
+    def nth_fib(n):
+        if n == 1:
+            return 0
+        elif n == 2:
+            return 1
+        else:
+            return nth_fib(n - 1) + nth_fib(n - 2)
+    def count():
+        nonlocal n
+        n += 1
+        return nth_fib(n)
+    return count
 
 class Account:
     """An account has a balance and a holder.
@@ -83,7 +103,8 @@ class Account:
     def time_to_retire(self, amount):
         """Return the number of years until balance would grow to amount."""
         assert self.balance > 0 and amount > 0 and self.interest > 0
-        "*** YOUR CODE HERE ***"
+        from math import log, ceil
+        return ceil(log(amount/self.balance, 1 + Account.interest))
 
 class FreeChecking(Account):
     """A bank account that charges for withdrawals, but the first two are free!
@@ -110,4 +131,20 @@ class FreeChecking(Account):
     withdraw_fee = 1
     free_withdrawals = 2
 
-    "*** YOUR CODE HERE ***"
+    def __init__(self, account_holder):
+        self.holder = account_holder
+        self.balance = 0
+        self.free_withdrawals = FreeChecking.free_withdrawals
+
+    def withdraw(self, amount):
+        """Subtract amount from balance if funds are available."""
+        if self.free_withdrawals > 0:
+            self.free_withdrawals -= 1
+            if amount > self.balance:
+                return 'Insufficient funds'
+            self.balance = self.balance - amount
+        else:
+            if amount > self.balance:
+                return 'Insufficient funds'
+            self.balance = self.balance - amount - FreeChecking.withdraw_fee
+        return self.balance
