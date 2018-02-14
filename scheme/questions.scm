@@ -5,13 +5,23 @@
 
 ; Some utility functions that you may find useful to implement.
 (define (map proc items)
-  'replace-this-line)
+(cond
+    ((null? items) nil)
+    (else (cons (proc (car items))
+                  (map proc
+(cdr items))))))
 
 (define (cons-all first rests)
   'replace-this-line)
 
 (define (zip pairs)
-  'replace-this-line)
+(cond
+    ((null? pairs) (list '() '()))
+    ((null? (car pairs)) nil)
+    (else (append (list (map car
+                             pairs))
+                    (zip (map cdr
+pairs))))))
 
 ;; Problem 17
 ;; Returns a list of two-element lists
@@ -46,33 +56,26 @@
 ;; Converts all let special forms in EXPR into equivalent forms using lambda
 (define (let-to-lambda expr)
   (cond ((atom? expr)
-         ; BEGIN PROBLEM 19
-         'replace-this-line
-         ; END PROBLEM 19
+         expr
          )
         ((quoted? expr)
-         ; BEGIN PROBLEM 19
-         'replace-this-line
-         ; END PROBLEM 19
+         expr
          )
         ((or (lambda? expr)
              (define? expr))
          (let ((form   (car expr))
                (params (cadr expr))
                (body   (cddr expr)))
-           ; BEGIN PROBLEM 19
-           'replace-this-line
-           ; END PROBLEM 19
+           ; (define evaluated-body (map let-to-lambda body))
+           (cons form (cons params (map let-to-lambda body)))
            ))
         ((let? expr)
          (let ((values (cadr expr))
                (body   (cddr expr)))
-           ; BEGIN PROBLEM 19
-           'replace-this-line
-           ; END PROBLEM 19
+           (append (list (cons 'lambda (cons (car (zip values))
+                                (append (map let-to-lambda body) nil))))
+                    (map let-to-lambda (cadr (zip values))))
            ))
         (else
-         ; BEGIN PROBLEM 19
-         'replace-this-line
-         ; END PROBLEM 19
+         (map let-to-lambda expr)
          )))
